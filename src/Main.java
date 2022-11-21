@@ -8,8 +8,8 @@ public class Main {
 
     private Scanner scanner = new Scanner(System.in);
     static Connection conn=null;
-    static ApplicationCentrale appCentrale;
-    static ApplicationEtudiante appEtudiante;
+    ApplicationCentrale appCentrale;
+    ApplicationEtudiante appEtudiante;
     public static void main (String[]args) {
         Main m=new Main();
 
@@ -19,19 +19,21 @@ public class Main {
             System.out.println("Driver PostgreSQL manquant !");
             System.exit(1);
         }
-        String url= "jdbc:postgresql://localhost:5432/postgres";
+        //localhost: jdbc:postgresql://172.24.2.6:5432/postgres
+        String url= "jdbc:postgresql://172.24.2.6:5432/dbadamebarhdadi";
 
         try {
-            conn= DriverManager.getConnection(url,"postgres","postgres");
+            // postgres postgres or adamebarhdadi P3EISJ7DN
+            conn= DriverManager.getConnection(url,"adamebarhdadi","P3EISJ7DN");
         } catch (SQLException e) {
             System.out.println("Impossible de joindre le server !");
             System.exit(1);
         }
-        declaration();
+        m.declaration();
         m.menu();
     }
 
-   public static void declaration(){
+   public void declaration(){
             appCentrale = new ApplicationCentrale();
             appEtudiante = new ApplicationEtudiante();
         }
@@ -55,6 +57,7 @@ public class Main {
             case 3:
                 quitter();
                 break;
+
         }
     }
     public void menuCentrale(){
@@ -62,6 +65,8 @@ public class Main {
         System.out.println("1 : Ajouter Un Cours");
     System.out.println("2 : Changer de menu");
         System.out.println("3 : Quitter");
+        System.out.println("4 : Visualiser Cours");
+        System.out.println("5 : Ajouter Un Etudiant");
         int choixMenu=scanner.nextInt();
         switch (choixMenu){
             case 1:
@@ -72,6 +77,14 @@ public class Main {
                 break;
             case 3:
                 quitter();
+            case 4:
+                appCentrale.visualiserCours();
+                break;
+            case 5:
+                appCentrale.ajouterEtudiant();
+                break;
+            default:
+                menuCentrale();
                 break;
         }
     }
