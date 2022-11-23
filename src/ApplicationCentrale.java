@@ -2,6 +2,7 @@ import Bcrypt.BCrypt;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -10,20 +11,23 @@ import java.util.Date;
 import java.util.Scanner;
 
 public class ApplicationCentrale {
- Main m=new Main();
 Connection connection=Main.conn;
 Scanner scanner=new Scanner(System.in);
     String sel= BCrypt.gensalt();
     PreparedStatement ajouterUnCours,ajouterEtudiant,inscrireEtudiantAUnCours,ajouterProjet,ajouterGroupe,validerUnGroupe,
-    validerToutLesGroupes,visualiserCours;
+    validerToutLesGroupes,visualiserCours,visualiserProjet,visualiserGroupe;
 
     public ApplicationCentrale(){
         try {
            ajouterUnCours= connection.prepareStatement("SELECT projet.ajouterCours(?,?,?,?);");
-            visualiserCours= connection.prepareStatement("SELECT  projet.visualiserCours();");
             ajouterEtudiant = connection.prepareStatement("SELECT projet.ajouterEtudiant(?,?,?,?);");
             inscrireEtudiantAUnCours=connection.prepareStatement("SELECT projet.inscrireEtudiantACours(?,?);");
             ajouterProjet=connection.prepareStatement("SELECT projet.ajouterProjet(?,?,?,?,?,?)");
+            ajouterGroupe=connection.prepareStatement("SELECT projet.ajouterGroupes(?,?)");
+            visualiserCours= connection.prepareStatement("SELECT * FROM visualiserCours() t(code CHAR(8), nom VARCHAR(255), projet VARCHAR);" );
+            visualiserProjet=connection.prepareStatement("SELECT * FROM projet.visualiserProjets");
+            validerUnGroupe=connection.prepareStatement("SELECT projet.validerGroupe(?,?);");
+            validerToutLesGroupes=connection.prepareStatement("SELECT projet.validerToutGroupe(?);");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -31,7 +35,7 @@ Scanner scanner=new Scanner(System.in);
         //faire fonction
     }
     public void ajouterCours(){
-        String nom; Integer bloc , nbeCredit;
+        String nom; int bloc , nbeCredit;
         try {
             System.out.println("Entrer le code du cours");
             ajouterUnCours.setString(1,scanner.nextLine());
@@ -39,26 +43,18 @@ Scanner scanner=new Scanner(System.in);
             nom=scanner.nextLine();
             ajouterUnCours.setString(2,nom);
             System.out.println("Entrer le bloc du cours");
-            bloc= Integer.valueOf(scanner.nextLine());
+            bloc= Integer.parseInt(scanner.nextLine());
             ajouterUnCours.setInt(3,bloc);
             System.out.println("Entrer le nombre de credit du cours");
             nbeCredit=scanner.nextInt();
             ajouterUnCours.setInt(4,nbeCredit);
             ajouterUnCours.execute();
             System.out.println("c bon le S");
-           m.menuCentrale();
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    public void visualiserCours(){
-        try {
-            System.out.println(visualiserCours.execute());
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
 
     public void ajouterEtudiant(){
         String nom,prenom,email,password;
@@ -92,7 +88,7 @@ Scanner scanner=new Scanner(System.in);
             inscrireEtudiantAUnCours.setString(2,scanner.nextLine());
             inscrireEtudiantAUnCours.execute();
         }catch (SQLException e){
-            throw new RuntimeException(e);
+            System.out.println(e.getMessage().split("\n")[0]+"\n");
         }
     }
 
@@ -124,8 +120,95 @@ Scanner scanner=new Scanner(System.in);
             ajouterProjet.setString(6,identifiantProjet);
             ajouterProjet.execute();
         }catch (SQLException e) {
-           System.out.println(e.getMessage().split("\n")[0]);
+           System.out.println(e.getMessage().split("\n")[0]+"\n");
+        }
+    }
+    public void ajouterGroupe(){
+        String projet; int tailleMaxGroupe;
+        try {
+            System.out.println("Identifiant du projet ou il faut rajouter un groupe");
+            projet= scanner.nextLine();
+            ajouterGroupe.setString(1,projet);
+
+            System.out.println("Capacite  max du groupe");
+            tailleMaxGroupe= Integer.parseInt(scanner.nextLine());
+            ajouterGroupe.setInt(2,tailleMaxGroupe);
+
+            ajouterGroupe.execute();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage().split("\n")[0]+"\n");
         }
 
     }
+
+    public void visualiserCours(){
+        try {
+            ResultSet set=visualiserCours.executeQuery();
+            System.out.println();
+            System.out.printf(" | %-8s | %-10s | %-5s  ",set.getMetaData().getColumnName(1),set.getMetaData().getColumnName(2),set.getMetaData().getColumnName(3));
+            System.out.println();
+
+            while (set.next()){
+            System.out.printf(" | %-8s | %-10s | %-5s  ",set.getString("code"),set.getString("nom"),set.getString("projet"));
+                System.out.println();
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public void visualiserProjets(){
+        try {
+
+            ResultSet set=visualiserProjet.executeQuery();
+
+            String column1=set.getMetaData().getColumnName(1),column2=set.getMetaData().getColumnName(2),column3=set.getMetaData().getColumnName(3),
+                    column4=set.getMetaData().getColumnName(4),column5=set.getMetaData().getColumnName(5),column6=set.getMetaData().getColumnName(6);
+
+            System.out.println();
+            System.out.printf("| %-20s | %-10s | %-10s | %-21s | %-24s | %-21s " ,column1,column2,column3,column4,column5,column6);
+            System.out.println();
+
+            while (set.next()){
+                System.out.printf("| %-20s | %-10s | %-10s | %-21s | %-24s | %-21s ",set.getString(column1),set.getString(column2),
+                        set.getString(column3),set.getString(column4),set.getString(column5),set.getString(column6));
+                System.out.println();
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public void visualiserGroupe(){
+
+    }
+
+    public void validerUnGroupe(){
+        int numeroGroupe; String identifiantProjet;
+        try {
+            System.out.println("Numero du groupe a valider");
+            numeroGroupe= Integer.parseInt(scanner.nextLine());
+            validerUnGroupe.setInt(1,numeroGroupe);
+
+            System.out.println("Id du projet (String)");
+            identifiantProjet= scanner.nextLine();
+            validerUnGroupe.setString(2,identifiantProjet);
+
+            validerUnGroupe.execute();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage().split("\n")[0]+"\n");
+        }
+    }
+    public void validerToutLesGroupes(){
+        String identifiantProjet;
+        try {
+            System.out.println("Id du projet (String)");
+            identifiantProjet= scanner.nextLine();
+            validerToutLesGroupes.setString(1,identifiantProjet);
+
+            validerToutLesGroupes.execute();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage().split("\n")[0]+"\n");
+        }
+
+    }
+
 }

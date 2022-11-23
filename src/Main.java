@@ -19,12 +19,12 @@ public class Main {
             System.out.println("Driver PostgreSQL manquant !");
             System.exit(1);
         }
-        //localhost: jdbc:postgresql://172.24.2.6:5432/postgres
-        String url= "jdbc:postgresql://172.24.2.6:5432/dbadamebarhdadi";
+        String url="jdbc:postgresql://localhost:5432/postgres";
+      //  String url= "jdbc:postgresql://172.24.2.6:5432/dbadamebarhdadi";
 
         try {
-            // postgres postgres or adamebarhdadi P3EISJ7DN
-            conn= DriverManager.getConnection(url,"adamebarhdadi","P3EISJ7DN");
+            conn= DriverManager.getConnection(url,"postgres","postgres");
+            //conn= DriverManager.getConnection(url,"adamebarhdadi","P3EISJ7DN");
         } catch (SQLException e) {
             System.out.println("Impossible de joindre le server !");
             System.exit(1);
@@ -61,40 +61,61 @@ public class Main {
         }
     }
     public void menuCentrale(){
-    System.out.println("Bienvenue dans l'application centrale \n");
+
+    System.out.println("\nBienvenue dans l'application centrale \n");
         System.out.println("1 : Ajouter Un Cours");
-    System.out.println("2 : Changer de menu");
-        System.out.println("3 : Quitter");
-        System.out.println("4 : Visualiser Cours");
-        System.out.println("5 : Ajouter Un Etudiant");
-        System.out.println("6 : Inscrire Un Etudiant");
-        System.out.println("7 : Ajouter Un Projet");
+        System.out.println("2 : Ajouter Un Etudiant");
+        System.out.println("3 : Inscrire Un Etudiant");
+        System.out.println("4 : Ajouter Un Projet");
+        System.out.println("5 : Ajouter Un Groupe");
+        System.out.println("6 : Visualiser Cours");
+        System.out.println("7 : Visualiser Projet");
+        System.out.println("8 : Visualiser Groupe");
+        System.out.println("9 : Valider Un Groupe");
+        System.out.println("10 : Valider tout les  Groupe");
+        System.out.println("11 : Changer de menu");
+        System.out.println("12 : Quitter");
+
         int choixMenu=scanner.nextInt();
     declaration();
             switch (choixMenu) {
-
                 case 1:
                     appCentrale.ajouterCours();
                     break;
                 case 2:
-                    menu();
-                    break;
-                case 3:
-                    quitter();
-                case 4:
-                    appCentrale.visualiserCours();
-                    break;
-                case 5:
                     appCentrale.ajouterEtudiant();
                     break;
-                case 6:
+                case 3:
                     appCentrale.inscrireEtudiantACours();
                     break;
-                case 7:
+                case 4:
                     appCentrale.ajouterProjet();
                     break;
+                case 5:
+                    appCentrale.ajouterGroupe();
+                    break;
+                case 6:
+                    appCentrale.visualiserCours();
+                    break;
+                case 7:
+                    appCentrale.visualiserProjets();
+                    break;
+                case 8:
+                    appCentrale.visualiserGroupe();
+                    break;
+                case 9:
+                    appCentrale.validerUnGroupe();
+                    break;
+                case 10:
+                    appCentrale.validerToutLesGroupes();
+                    break;
+                case 11:
+                    menu();
+                    break;
+                case 12:
+                    quitter();
             }
-
+    menuCentrale();
     }
     public void menuStudent(){
         System.out.println("Bienvenue dans l'application etudiante \n");
