@@ -67,26 +67,34 @@ public class Main {
         System.out.println("3 : Quitter");
         System.out.println("4 : Visualiser Cours");
         System.out.println("5 : Ajouter Un Etudiant");
+        System.out.println("6 : Inscrire Un Etudiant");
+        System.out.println("7 : Ajouter Un Projet");
         int choixMenu=scanner.nextInt();
-        switch (choixMenu){
-            case 1:
-                appCentrale.ajouterCours();
-                break;
-            case 2:
-                menu();
-                break;
-            case 3:
-                quitter();
-            case 4:
-                appCentrale.visualiserCours();
-                break;
-            case 5:
-                appCentrale.ajouterEtudiant();
-                break;
-            default:
-                menuCentrale();
-                break;
-        }
+    declaration();
+            switch (choixMenu) {
+
+                case 1:
+                    appCentrale.ajouterCours();
+                    break;
+                case 2:
+                    menu();
+                    break;
+                case 3:
+                    quitter();
+                case 4:
+                    appCentrale.visualiserCours();
+                    break;
+                case 5:
+                    appCentrale.ajouterEtudiant();
+                    break;
+                case 6:
+                    appCentrale.inscrireEtudiantACours();
+                    break;
+                case 7:
+                    appCentrale.ajouterProjet();
+                    break;
+            }
+
     }
     public void menuStudent(){
         System.out.println("Bienvenue dans l'application etudiante \n");
