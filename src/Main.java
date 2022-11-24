@@ -10,6 +10,7 @@ public class Main {
     static Connection conn=null;
     ApplicationCentrale appCentrale;
     ApplicationEtudiante appEtudiante;
+    static boolean connexion;
     public static void main (String[]args) {
         Main m=new Main();
 
@@ -50,14 +51,10 @@ public class Main {
         switch (choixMenu){
             case 1:
                 menuCentrale();
-                break;
             case 2:
                 menuStudent();
-                break;
             case 3:
-                quitter();
-                break;
-
+                System.exit(200);
         }
     }
     public void menuCentrale(){
@@ -65,7 +62,7 @@ public class Main {
     System.out.println("\nBienvenue dans l'application centrale \n");
         System.out.println("1 : Ajouter Un Cours");
         System.out.println("2 : Ajouter Un Etudiant");
-        System.out.println("3 : Inscrire Un Etudiant");
+        System.out.println("3 : Inscrire Un Etudiant a un cours");
         System.out.println("4 : Ajouter Un Projet");
         System.out.println("5 : Ajouter Un Groupe");
         System.out.println("6 : Visualiser Cours");
@@ -113,37 +110,77 @@ public class Main {
                     menu();
                     break;
                 case 12:
-                    quitter();
+                    System.exit(200);
             }
     menuCentrale();
     }
     public void menuStudent(){
-        System.out.println("Bienvenue dans l'application etudiante \n");
-        System.out.println("1 : Changer de menu");
+        System.out.println("1 : Se connecter");
+        System.out.println("2 : Changer de menu");
         System.out.println("3 : Quitter");
         int choixMenu=scanner.nextInt();
         switch (choixMenu){
             case 1:
-                menu();
-                break;
+                appEtudiante.seConnecter();
+                if(connexion){
+                    menuStudentConnecter();
+                }
+                else{
+                    menuStudent();
+                }
             case 2:
-                quitter();
-                break;
+                menu();
+            case 3:
+               System.exit(201);
+
         }
     }
 
 
     public void menuStudentConnecter(){
-
-    }
-
-    public void quitter(){
-        try {
-            conn.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
+        System.out.println("\nBienvenue dans l'application etudiante \n");
+        declaration();
+        System.out.println("1 : Visualise Cours Inscrit");
+        System.out.println("2 : S'inscrire a un groupe");
+        System.out.println("3 : Se desinscrire d'un projet");
+        System.out.println("4 : Ajouter Un Projet");
+        System.out.println("5 : Visualiser projet pour lequelle pas encore de groupe");
+        System.out.println("6 : Visualiser composition groupe d'un projet");
+        System.out.println("7 : Se deconnecter");
+        int choixMenu=scanner.nextInt();
+        declaration();
+        switch (choixMenu) {
+            case 1:
+                appEtudiante.visualiserCoursInscrit();
+                break;
+            case 2:
+                appEtudiante.inscriptionGroupe();
+                break;
+            case 3:
+                appEtudiante.demissionGroupe();
+                break;
+            case 4:
+                appCentrale.ajouterProjet();
+                break;
+            case 5:
+                appEtudiante.visualiserProjetPasEncoreInscrit();
+                break;
+            case 6:
+               appEtudiante.visualiserGroupeIncomplet();
+                break;
+            case 7:
+                deconnecter();
+                break;
         }
+        menuStudentConnecter();
     }
+
+    public void deconnecter(){
+            connexion = false;
+            System.out.println("Deconnexion réussi \n");
+            menu();
+        }
+
 
 }
 

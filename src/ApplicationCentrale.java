@@ -15,7 +15,7 @@ Connection connection=Main.conn;
 Scanner scanner=new Scanner(System.in);
     String sel= BCrypt.gensalt();
     PreparedStatement ajouterUnCours,ajouterEtudiant,inscrireEtudiantAUnCours,ajouterProjet,ajouterGroupe,validerUnGroupe,
-    validerToutLesGroupes,visualiserCours,visualiserProjet,visualiserGroupe;
+    validerToutLesGroupes,visualiserCours,visualiserProjet,visualiserGroupe,transformStringIdIntoIntegerID;
 
     public ApplicationCentrale(){
         try {
@@ -26,6 +26,8 @@ Scanner scanner=new Scanner(System.in);
             ajouterGroupe=connection.prepareStatement("SELECT projet.ajouterGroupes(?,?)");
             visualiserCours= connection.prepareStatement("SELECT * FROM visualiserCours() t(code CHAR(8), nom VARCHAR(255), projet VARCHAR);" );
             visualiserProjet=connection.prepareStatement("SELECT * FROM projet.visualiserProjets");
+            visualiserGroupe=connection.prepareStatement("SELECT * FROM projet.visualiserCompositions WHERE projet=(?);");
+            transformStringIdIntoIntegerID=connection.prepareStatement("SELECT  projet.transformStringIdIntoIntegerID (?);");
             validerUnGroupe=connection.prepareStatement("SELECT projet.validerGroupe(?,?);");
             validerToutLesGroupes=connection.prepareStatement("SELECT projet.validerToutGroupe(?);");
         } catch (SQLException e) {
@@ -178,6 +180,30 @@ Scanner scanner=new Scanner(System.in);
         }
     }
     public void visualiserGroupe(){
+        int projet=-1; ResultSet set; String projetString;
+        try {
+            System.out.println("Id du projet (String)");
+            projetString=scanner.nextLine();
+
+            transformStringIdIntoIntegerID.setString(1,projetString);
+            transformStringIdIntoIntegerID.executeQuery();
+            while(transformStringIdIntoIntegerID.getResultSet().next()){
+                projet = transformStringIdIntoIntegerID.getResultSet().getInt(1);
+            }
+
+            visualiserGroupe.setInt(1,projet);
+        set=visualiserGroupe.executeQuery();
+            System.out.println("ici");
+            System.out.printf(" | %-7s | %-12s | %-12s | %-9s | %-9s  ","Numero","Nom","Prénom","Complet?","Valider?");
+            System.out.println();
+            while (set.next()){
+                System.out.printf(" | %-7s | %-12s | %-12s | %-9s | %-9s ",set.getString("numero"),set.getString("nom"),set.getString("prenom"),
+                        set.getBoolean("complet"),set.getBoolean("valider"));
+                System.out.println();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
     }
 
