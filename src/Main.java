@@ -20,12 +20,12 @@ public class Main {
             System.out.println("Driver PostgreSQL manquant !");
             System.exit(1);
         }
-        String url="jdbc:postgresql://localhost:5432/postgres";
-      //  String url= "jdbc:postgresql://172.24.2.6:5432/dbadamebarhdadi";
+      //  String url="jdbc:postgresql://localhost:5432/postgres";
+        String url= "jdbc:postgresql://172.24.2.6:5432/dbadamebarhdadi";
 
         try {
-            conn= DriverManager.getConnection(url,"postgres","postgres");
-            //conn= DriverManager.getConnection(url,"adamebarhdadi","P3EISJ7DN");
+           // conn= DriverManager.getConnection(url,"postgres","postgres");
+            conn= DriverManager.getConnection(url,"adamebarhdadi","P3EISJ7DN");
         } catch (SQLException e) {
             System.out.println("Impossible de joindre le server !");
             System.exit(1);
@@ -143,7 +143,7 @@ public class Main {
         System.out.println("1 : Visualise Cours Inscrit");
         System.out.println("2 : S'inscrire a un groupe");
         System.out.println("3 : Se desinscrire d'un projet");
-        System.out.println("4 : Ajouter Un Projet");
+        System.out.println("4 : Visualiser Projet Cours Inscrit");
         System.out.println("5 : Visualiser projet pour lequelle pas encore de groupe");
         System.out.println("6 : Visualiser composition groupe d'un projet");
         System.out.println("7 : Se deconnecter");
@@ -160,7 +160,7 @@ public class Main {
                 appEtudiante.demissionGroupe();
                 break;
             case 4:
-                appCentrale.ajouterProjet();
+                appEtudiante.visualiserProjetInscrit();
                 break;
             case 5:
                 appEtudiante.visualiserProjetPasEncoreInscrit();

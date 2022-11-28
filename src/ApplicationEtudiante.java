@@ -18,12 +18,13 @@ public class ApplicationEtudiante {
         try {
             getIdFromEmail=connection.prepareStatement("SELECT projet.transformEmailIntoId(?)");
             getPasswordFromEmail=connection.prepareStatement("SELECT password FROM projet.etudiants WHERE email=(?)");
-            visualiserCoursInscrit=connection.prepareStatement("SELECT projet");
+            visualiserCoursInscrit=connection.prepareStatement("SELECT * FROM projet.visualiserCoursParticipe WHERE etudiant=(?);");
             inscriptionGroupe=connection.prepareStatement("SELECT projet.ajouterEtudiantAGroupe (?,?,?);");
             demissionGroupe=connection.prepareStatement("SELECT projet.retirerEtudiantGroupe(?,?);");
             visualiserGroupeIncomplet=connection.prepareStatement("SELECT * FROM projet.visualiserCompositionGroupeIncomplet WHERE projet=(?);");
             transformStringIdIntoIntegerID=connection.prepareStatement("SELECT  projet.transformStringIdIntoIntegerID (?);");
             visualiserProjetPasEncoreInscrit=connection.prepareStatement("SELECT * FROM projet.visualiserProjetPasEncoreInscrit WHERE etudiant=(?)");
+            visualiserProjetInscrit=connection.prepareStatement("SELECT * FROM projet.visualiserProjetsInscrit WHERE etudiant=(?);");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -69,6 +70,20 @@ public class ApplicationEtudiante {
 
 
     public void visualiserCoursInscrit(){
+        ResultSet set;
+        try {
+            visualiserCoursInscrit.setInt(1,idEtudiant);
+            set=visualiserCoursInscrit.executeQuery();
+            System.out.printf("| %-10s | %-15s | %-15s ",set.getMetaData().getColumnName(1),set.getMetaData().getColumnName(2),"Id projet");
+            System.out.println();
+            while (set.next()){
+                System.out.printf("| %-10s | %-15s | %-15s ",set.getString(set.getMetaData().getColumnName(1)),set.getString(set.getMetaData().getColumnName(2))
+                        ,set.getString(set.getMetaData().getColumnName(3)));
+                System.out.println();
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
 
 
     }
@@ -112,7 +127,23 @@ public class ApplicationEtudiante {
             System.out.println(e.getMessage().split("\n")[0]+"\n");
         }
     }
+    public void visualiserProjetInscrit(){
+        ResultSet set;
+        try {
+            visualiserProjetInscrit.setInt(1,idEtudiant);
+            set=visualiserProjetInscrit.executeQuery();
+            String column1=set.getMetaData().getColumnName(1),column2 = set.getMetaData().getColumnName(2),column3=set.getMetaData().getColumnName(3), column4=set.getMetaData().getColumnName(4);
+            System.out.printf("| %-19s | %-10s | %-9s | %-9s",column1,column2,column3,"Groupe");
+            System.out.println();
+            while (set.next()){
+                System.out.printf("| %-19s | %-10s | %-9s | %-9s",set.getString(column1),set.getString(column2),set.getString(column3),set.getString(column4));
+                System.out.println();
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage().split("\n")[0]+"\n");
+        }
 
+    }
     public void visualiserGroupeIncomplet(){
         int projet=-1; ResultSet set; String projetString;
         try {
@@ -136,7 +167,7 @@ public class ApplicationEtudiante {
                System.out.println();
            }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage().split("\n")[0]+"\n");
         }
 
     }
@@ -148,15 +179,15 @@ public class ApplicationEtudiante {
            String column1=set.getMetaData().getColumnName(1), column2=set.getMetaData().getColumnName(2), column3=set.getMetaData().getColumnName(3),
                     column4=set.getMetaData().getColumnName(4), column5=set.getMetaData().getColumnName(5);
 
-            System.out.printf(" | %-9s | %-10s | %-17s | %-10s | %-10s",column1,column2,column3,column4,column5);
+            System.out.printf(" | %-9s | %-10s | %-19s | %-10s | %-10s",column1,column2,column3,column4,column5);
             System.out.println();
             while (set.next()){
-                System.out.printf(" | %-9s | %-10s | %-17s | %-10s | %-10s",set.getString(column1),set.getString(column2),set.getString(column3)
+                System.out.printf(" | %-9s | %-10s | %-19s | %-10s | %-10s",set.getString(column1),set.getString(column2),set.getString(column3)
                         ,set.getString(column4),set.getString(column5));
                 System.out.println();
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage().split("\n")[0]+"\n");
         }
 
     }
