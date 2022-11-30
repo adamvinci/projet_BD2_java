@@ -142,7 +142,7 @@ public class Main {
         declaration();
         System.out.println("1 : Visualise Cours Inscrit");
         System.out.println("2 : S'inscrire a un groupe");
-        System.out.println("3 : Se desinscrire d'un projet");
+        System.out.println("3 : Se desinscrire d'un groupe");
         System.out.println("4 : Visualiser Projet Cours Inscrit");
         System.out.println("5 : Visualiser projet pour lequelle pas encore de groupe");
         System.out.println("6 : Visualiser composition groupe d'un projet");

@@ -38,9 +38,10 @@ public class ApplicationEtudiante {
             System.out.println("Entrer votre email");
             email=scanner.nextLine();
             getIdFromEmail.setString(1,email);
-            getIdFromEmail.executeQuery();
-           while(getIdFromEmail.getResultSet().next()){
-                idStudent = getIdFromEmail.getResultSet().getInt(1);
+            try(ResultSet set=getIdFromEmail.executeQuery()) {
+                while (set.next()) {
+                    idStudent = set.getInt(1);
+                }
             }
             if(idStudent == 0) {
                 System.out.println("Cet email n'existe pas\n");
@@ -48,10 +49,11 @@ public class ApplicationEtudiante {
                 System.out.println("Entrer votre mdp");
                 password=scanner.nextLine();
                  getPasswordFromEmail.setString(1,email);
-                getPasswordFromEmail.execute();
-                while (getPasswordFromEmail.getResultSet().next()){
-                    passwordDb = getPasswordFromEmail.getResultSet().getString(1);
-                }
+               try(ResultSet set = getPasswordFromEmail.executeQuery()) {
+                   while (set.next()) {
+                       passwordDb = set.getString(1);
+                   }
+               }
                 if(BCrypt.checkpw(password,passwordDb)){
                     System.out.println("Connexion reussi \n");
                     Main.connexion =true;
@@ -68,18 +70,18 @@ public class ApplicationEtudiante {
         }
     }
 
-
+//1
     public void visualiserCoursInscrit(){
-        ResultSet set;
         try {
             visualiserCoursInscrit.setInt(1,idEtudiant);
-            set=visualiserCoursInscrit.executeQuery();
-            System.out.printf("| %-10s | %-15s | %-15s ",set.getMetaData().getColumnName(1),set.getMetaData().getColumnName(2),"Id projet");
-            System.out.println();
-            while (set.next()){
-                System.out.printf("| %-10s | %-15s | %-15s ",set.getString(set.getMetaData().getColumnName(1)),set.getString(set.getMetaData().getColumnName(2))
-                        ,set.getString(set.getMetaData().getColumnName(3)));
+            try(ResultSet set=visualiserCoursInscrit.executeQuery()) {
+                System.out.printf("| %-10s | %-15s | %-15s ", set.getMetaData().getColumnName(1), set.getMetaData().getColumnName(2), "Id projet");
                 System.out.println();
+                while (set.next()) {
+                    System.out.printf("| %-10s | %-15s | %-15s ", set.getString(set.getMetaData().getColumnName(1)), set.getString(set.getMetaData().getColumnName(2))
+                            , set.getString(set.getMetaData().getColumnName(3)));
+                    System.out.println();
+                }
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -87,7 +89,7 @@ public class ApplicationEtudiante {
 
 
     }
-
+//2
     public void inscriptionGroupe(){
         String projet; int groupe;
 
@@ -107,7 +109,7 @@ public class ApplicationEtudiante {
                 System.out.println(e.getMessage().split("\n")[0]+"\n");
             }
     }
-
+    //3
     public void demissionGroupe(){
         String projet;
         try {
@@ -127,64 +129,68 @@ public class ApplicationEtudiante {
             System.out.println(e.getMessage().split("\n")[0]+"\n");
         }
     }
+    //4
     public void visualiserProjetInscrit(){
-        ResultSet set;
         try {
             visualiserProjetInscrit.setInt(1,idEtudiant);
-            set=visualiserProjetInscrit.executeQuery();
-            String column1=set.getMetaData().getColumnName(1),column2 = set.getMetaData().getColumnName(2),column3=set.getMetaData().getColumnName(3), column4=set.getMetaData().getColumnName(4);
-            System.out.printf("| %-19s | %-10s | %-9s | %-9s",column1,column2,column3,"Groupe");
-            System.out.println();
-            while (set.next()){
-                System.out.printf("| %-19s | %-10s | %-9s | %-9s",set.getString(column1),set.getString(column2),set.getString(column3),set.getString(column4));
-                System.out.println();
-            }
-        } catch (SQLException e) {
-            System.out.println(e.getMessage().split("\n")[0]+"\n");
-        }
-
-    }
-    public void visualiserGroupeIncomplet(){
-        int projet=-1; ResultSet set; String projetString;
-        try {
-            System.out.println("Id du projet (String)");
-            projetString=scanner.nextLine();
-
-            transformStringIdIntoIntegerID.setString(1,projetString);
-            transformStringIdIntoIntegerID.executeQuery();
-            while(transformStringIdIntoIntegerID.getResultSet().next()){
-                projet = transformStringIdIntoIntegerID.getResultSet().getInt(1);
-            }
-
-            visualiserGroupeIncomplet.setInt(1,projet);
-           set= visualiserGroupeIncomplet.executeQuery();
-
-           System.out.printf(" | %-7s | %-12s | %-12s | %-15s","Numero","Nom","Prénom","Nombre de places");
-            System.out.println();
-           while (set.next()){
-                          System.out.printf(" | %-7s | %-12s | %-12s | %-15s",set.getString("numero"),set.getString("nom"),set.getString("prenom"),
-                       set.getString("nbePlace"));
+           try(ResultSet set=visualiserProjetInscrit.executeQuery()) {
+               String column1 = set.getMetaData().getColumnName(1), column2 = set.getMetaData().getColumnName(2), column3 = set.getMetaData().getColumnName(3), column4 = set.getMetaData().getColumnName(4);
+               System.out.printf("| %-19s | %-10s | %-9s | %-9s", column1, column2, column3, "Groupe");
                System.out.println();
+               while (set.next()) {
+                   System.out.printf("| %-19s | %-10s | %-9s | %-9s", set.getString(column1), set.getString(column2), set.getString(column3), set.getString(column4));
+                   System.out.println();
+               }
            }
         } catch (SQLException e) {
             System.out.println(e.getMessage().split("\n")[0]+"\n");
         }
 
     }
+   //5
     public void visualiserProjetPasEncoreInscrit(){
-        ResultSet set;
         try {
             visualiserProjetPasEncoreInscrit.setInt(1,idEtudiant);
-            set=visualiserProjetPasEncoreInscrit.executeQuery();
-           String column1=set.getMetaData().getColumnName(1), column2=set.getMetaData().getColumnName(2), column3=set.getMetaData().getColumnName(3),
-                    column4=set.getMetaData().getColumnName(4), column5=set.getMetaData().getColumnName(5);
+            try(ResultSet set=visualiserProjetPasEncoreInscrit.executeQuery()) {
+                String column1 = set.getMetaData().getColumnName(1), column2 = set.getMetaData().getColumnName(2), column3 = set.getMetaData().getColumnName(3),
+                        column4 = set.getMetaData().getColumnName(4), column5 = set.getMetaData().getColumnName(5);
 
-            System.out.printf(" | %-9s | %-10s | %-19s | %-10s | %-10s",column1,column2,column3,column4,column5);
-            System.out.println();
-            while (set.next()){
-                System.out.printf(" | %-9s | %-10s | %-19s | %-10s | %-10s",set.getString(column1),set.getString(column2),set.getString(column3)
-                        ,set.getString(column4),set.getString(column5));
+                System.out.printf(" | %-19s | %-10s | %-19s | %-10s | %-10s", column1, column2, column3, column4, column5);
                 System.out.println();
+                while (set.next()) {
+                    System.out.printf(" | %-19s | %-10s | %-19s | %-10s | %-10s", set.getString(column1), set.getString(column2), set.getString(column3)
+                            , set.getString(column4), set.getString(column5));
+                    System.out.println();
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage().split("\n")[0]+"\n");
+        }
+
+    }
+    // 6
+    public void visualiserGroupeIncomplet(){
+        int projet=-1;  String projetString;
+        try {
+            System.out.println("Id du projet (String)");
+            projetString=scanner.nextLine();
+
+            transformStringIdIntoIntegerID.setString(1,projetString);
+            try(ResultSet set =  transformStringIdIntoIntegerID.executeQuery()) {
+                while (transformStringIdIntoIntegerID.getResultSet().next()) {
+                    projet = transformStringIdIntoIntegerID.getResultSet().getInt(1);
+                }
+            }
+            visualiserGroupeIncomplet.setInt(1,projet);
+            try(ResultSet set= visualiserGroupeIncomplet.executeQuery()) {
+
+                System.out.printf(" | %-7s | %-12s | %-12s | %-15s", "Numero", "Nom", "Prénom", "Nombre de places");
+                System.out.println();
+                while (set.next()) {
+                    System.out.printf(" | %-7s | %-12s | %-12s | %-15s", set.getString("numero"), set.getString("nom"), set.getString("prenom"),
+                            set.getString("nbePlace"));
+                    System.out.println();
+                }
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage().split("\n")[0]+"\n");

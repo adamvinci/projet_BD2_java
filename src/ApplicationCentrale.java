@@ -8,6 +8,8 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.InputMismatchException;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 public class ApplicationCentrale {
@@ -39,22 +41,23 @@ Scanner scanner=new Scanner(System.in);
     public void ajouterCours(){
         String nom; int bloc , nbeCredit;
         try {
-            System.out.println("Entrer le code du cours");
-            ajouterUnCours.setString(1,scanner.nextLine());
-            System.out.println("Entrer le nom du cours");
-            nom=scanner.nextLine();
-            ajouterUnCours.setString(2,nom);
-            System.out.println("Entrer le bloc du cours");
-            bloc= Integer.parseInt(scanner.nextLine());
-            ajouterUnCours.setInt(3,bloc);
-            System.out.println("Entrer le nombre de credit du cours");
-            nbeCredit=scanner.nextInt();
-            ajouterUnCours.setInt(4,nbeCredit);
-            ajouterUnCours.execute();
-            System.out.println("c bon le S");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+                System.out.println("Entrer le code du cours");
+                ajouterUnCours.setString(1, scanner.nextLine());
+                System.out.println("Entrer le nom du cours");
+                nom = scanner.nextLine();
+                ajouterUnCours.setString(2, nom);
+                System.out.println("Entrer le bloc du cours");
+                bloc = Integer.parseInt(scanner.nextLine());
+                ajouterUnCours.setInt(3, bloc);
+                System.out.println("Entrer le nombre de credit du cours");
+                nbeCredit = scanner.nextInt();
+                ajouterUnCours.setInt(4, nbeCredit);
+                ajouterUnCours.execute();
+
+            } catch (SQLException | NoSuchElementException | NumberFormatException e) {
+                System.out.println("\n"+e.getMessage().split("\n")[0] + "\n");
+            }
+
     }
 
 
@@ -75,7 +78,7 @@ Scanner scanner=new Scanner(System.in);
             ajouterEtudiant.setString(4,password);
             ajouterEtudiant.execute();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            System.out.println(e.getMessage().split("\n")[0]+"\n");
         }
 
     }
@@ -132,7 +135,7 @@ Scanner scanner=new Scanner(System.in);
             projet= scanner.nextLine();
             ajouterGroupe.setString(1,projet);
 
-            System.out.println("Capacite  max du groupe");
+            System.out.println("Capacite max du groupe");
             tailleMaxGroupe= Integer.parseInt(scanner.nextLine());
             ajouterGroupe.setInt(2,tailleMaxGroupe);
 
@@ -145,14 +148,15 @@ Scanner scanner=new Scanner(System.in);
 
     public void visualiserCours(){
         try {
-            ResultSet set=visualiserCours.executeQuery();
-            System.out.println();
-            System.out.printf(" | %-8s | %-10s | %-5s  ",set.getMetaData().getColumnName(1),set.getMetaData().getColumnName(2),set.getMetaData().getColumnName(3));
-            System.out.println();
-
-            while (set.next()){
-            System.out.printf(" | %-8s | %-10s | %-5s  ",set.getString("code"),set.getString("nom"),set.getString("projet"));
+            try(ResultSet set=visualiserCours.executeQuery();) {
                 System.out.println();
+                System.out.printf(" | %-8s | %-10s | %-5s  ", set.getMetaData().getColumnName(1), set.getMetaData().getColumnName(2), set.getMetaData().getColumnName(3));
+                System.out.println();
+
+                while (set.next()) {
+                    System.out.printf(" | %-8s | %-10s | %-5s  ", set.getString("code"), set.getString("nom"), set.getString("projet"));
+                    System.out.println();
+                }
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -161,46 +165,50 @@ Scanner scanner=new Scanner(System.in);
     public void visualiserProjets(){
         try {
 
-            ResultSet set=visualiserProjet.executeQuery();
+           try( ResultSet set=visualiserProjet.executeQuery()) {
 
-            String column1=set.getMetaData().getColumnName(1),column2=set.getMetaData().getColumnName(2),column3=set.getMetaData().getColumnName(3),
-                    column4=set.getMetaData().getColumnName(4),column5=set.getMetaData().getColumnName(5),column6=set.getMetaData().getColumnName(6);
+               String column1 = set.getMetaData().getColumnName(1), column2 = set.getMetaData().getColumnName(2), column3 = set.getMetaData().getColumnName(3),
+                       column4 = set.getMetaData().getColumnName(4), column5 = set.getMetaData().getColumnName(5), column6 = set.getMetaData().getColumnName(6);
 
-            System.out.println();
-            System.out.printf("| %-20s | %-10s | %-10s | %-21s | %-24s | %-21s " ,column1,column2,column3,column4,column5,column6);
-            System.out.println();
+               System.out.println();
+               System.out.printf("| %-20s | %-10s | %-10s | %-21s | %-24s | %-21s ", column1, column2, column3, column4, column5, column6);
+               System.out.println();
 
-            while (set.next()){
-                System.out.printf("| %-20s | %-10s | %-10s | %-21s | %-24s | %-21s ",set.getString(column1),set.getString(column2),
-                        set.getString(column3),set.getString(column4),set.getString(column5),set.getString(column6));
-                System.out.println();
-            }
+               while (set.next()) {
+                   System.out.printf("| %-20s | %-10s | %-10s | %-21s | %-24s | %-21s ", set.getString(column1), set.getString(column2),
+                           set.getString(column3), set.getString(column4), set.getString(column5), set.getString(column6));
+                   System.out.println();
+               }
+           }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
     public void visualiserGroupe(){
-        int projet=-1; ResultSet set; String projetString;
+        int projet=-1; String projetString;
         try {
             System.out.println("Id du projet (String)");
             projetString=scanner.nextLine();
 
             transformStringIdIntoIntegerID.setString(1,projetString);
-            transformStringIdIntoIntegerID.executeQuery();
-            while(transformStringIdIntoIntegerID.getResultSet().next()){
-                projet = transformStringIdIntoIntegerID.getResultSet().getInt(1);
+            try(ResultSet set1=transformStringIdIntoIntegerID.executeQuery()) {
+                while (set1.next()) {
+                    projet = set1.getInt(1);
+                }
             }
 
             visualiserGroupe.setInt(1,projet);
-        set=visualiserGroupe.executeQuery();
+        try(ResultSet set=visualiserGroupe.executeQuery()) {
             System.out.println("ici");
-            System.out.printf(" | %-7s | %-12s | %-12s | %-9s | %-9s  ","Numero","Nom","Prénom","Complet?","Valider?");
+            System.out.printf(" | %-7s | %-12s | %-12s | %-9s | %-9s  ", "Numero", "Nom", "Prénom", "Complet?", "Valider?");
             System.out.println();
-            while (set.next()){
-                System.out.printf(" | %-7s | %-12s | %-12s | %-9s | %-9s ",set.getString("numero"),set.getString("nom"),set.getString("prenom"),
-                        set.getBoolean("complet"),set.getBoolean("valider"));
+            while (set.next()) {
+                System.out.printf(" | %-7s | %-12s | %-12s | %-9s | %-9s ", set.getString("numero"), set.getString("nom"), set.getString("prenom"),
+                        set.getBoolean("complet"), set.getBoolean("valider"));
                 System.out.println();
             }
+        }
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
