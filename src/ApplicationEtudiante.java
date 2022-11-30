@@ -117,14 +117,15 @@ public class ApplicationEtudiante {
             projet=scanner.nextLine();
             demissionGroupe.setString(1,projet);
             demissionGroupe.setInt(2,idEtudiant);
-            demissionGroupe.executeQuery();
-            while (demissionGroupe.getResultSet().next()){
-                if(demissionGroupe.getResultSet().getInt(1)==0) {
-                    System.out.println("Désincription impossible,l'etudiant n'est pas inscrit a ce cours ou projet");
-                }else{
-                    System.out.println("Désinscription réussi");
-                }
-            }
+          try(ResultSet set =  demissionGroupe.executeQuery()) {
+              while (set.next()) {
+                  if (set.getInt(1) == 0) {
+                      System.out.println("Désincription impossible,l'etudiant n'est pas inscrit a ce cours ou a un groupe ");
+                  } else {
+                      System.out.println("Désinscription réussi");
+                  }
+              }
+          }
         } catch (SQLException e) {
             System.out.println(e.getMessage().split("\n")[0]+"\n");
         }
