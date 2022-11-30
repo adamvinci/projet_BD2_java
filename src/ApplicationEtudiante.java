@@ -22,7 +22,7 @@ public class ApplicationEtudiante {
             inscriptionGroupe=connection.prepareStatement("SELECT projet.ajouterEtudiantAGroupe (?,?,?);");
             demissionGroupe=connection.prepareStatement("SELECT projet.retirerEtudiantGroupe(?,?);");
             visualiserGroupeIncomplet=connection.prepareStatement("SELECT * FROM projet.visualiserCompositionGroupeIncomplet WHERE projet=(?);");
-            transformStringIdIntoIntegerID=connection.prepareStatement("SELECT  projet.transformStringIdIntoIntegerID (?);");
+            transformStringIdIntoIntegerID=connection.prepareStatement("SELECT  id_projet FROM projet.projets WHERE identifiant_projet = (?);");
             visualiserProjetPasEncoreInscrit=connection.prepareStatement("SELECT * FROM projet.visualiserProjetPasEncoreInscrit WHERE etudiant=(?)");
             visualiserProjetInscrit=connection.prepareStatement("SELECT * FROM projet.visualiserProjetsInscrit WHERE etudiant=(?);");
         } catch (SQLException e) {
@@ -32,6 +32,7 @@ public class ApplicationEtudiante {
 
         //faire fonction
     }
+    //possible de faire avec un seul select
     public void seConnecter(){
         String email,password,passwordDb=""; int idStudent=-1;
         try {
@@ -178,8 +179,8 @@ public class ApplicationEtudiante {
 
             transformStringIdIntoIntegerID.setString(1,projetString);
             try(ResultSet set =  transformStringIdIntoIntegerID.executeQuery()) {
-                while (transformStringIdIntoIntegerID.getResultSet().next()) {
-                    projet = transformStringIdIntoIntegerID.getResultSet().getInt(1);
+                while (set.next()) {
+                    projet = set.getInt(1);
                 }
             }
             visualiserGroupeIncomplet.setInt(1,projet);

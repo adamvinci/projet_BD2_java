@@ -29,7 +29,7 @@ Scanner scanner=new Scanner(System.in);
             visualiserCours= connection.prepareStatement("SELECT * FROM visualiserCours() t(code CHAR(8), nom VARCHAR(255), projet VARCHAR);" );
             visualiserProjet=connection.prepareStatement("SELECT * FROM projet.visualiserProjets");
             visualiserGroupe=connection.prepareStatement("SELECT * FROM projet.visualiserCompositions WHERE projet=(?);");
-            transformStringIdIntoIntegerID=connection.prepareStatement("SELECT  projet.transformStringIdIntoIntegerID (?);");
+            transformStringIdIntoIntegerID=connection.prepareStatement("SELECT  id_projet FROM projet.projets WHERE identifiant_projet = (?);");
             validerUnGroupe=connection.prepareStatement("SELECT projet.validerGroupe(?,?);");
             validerToutLesGroupes=connection.prepareStatement("SELECT projet.validerToutGroupe(?);");
         } catch (SQLException e) {
