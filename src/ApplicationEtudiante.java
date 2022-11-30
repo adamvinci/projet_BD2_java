@@ -84,7 +84,7 @@ public class ApplicationEtudiante {
                 }
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            System.out.println("\n"+e.getMessage().split("\n")[0] + "\n");
         }
 
 

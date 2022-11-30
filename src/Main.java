@@ -43,10 +43,12 @@ public class Main {
 
 
     public void menu()  {
-        System.out.println("Choisissez entre l'application centrale et l'application utilisateur \n");
-        System.out.println("1 : Application centrale");
-        System.out.println("2 : Application utilisateur");
-        System.out.println("3 : Quitter");
+
+            System.out.println("Choisissez entre l'application centrale et l'application utilisateur \n");
+            System.out.println("1 : Application centrale");
+            System.out.println("2 : Application utilisateur");
+            System.out.println("3 : Quitter");
+
         int choixMenu=scanner.nextInt();
         switch (choixMenu){
             case 1:

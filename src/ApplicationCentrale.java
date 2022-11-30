@@ -159,7 +159,7 @@ Scanner scanner=new Scanner(System.in);
                 }
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            System.out.println("\n"+e.getMessage().split("\n")[0] + "\n");
         }
     }
     public void visualiserProjets(){
@@ -181,7 +181,7 @@ Scanner scanner=new Scanner(System.in);
                }
            }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            System.out.println("\n"+e.getMessage().split("\n")[0] + "\n");
         }
     }
     public void visualiserGroupe(){
@@ -210,7 +210,7 @@ Scanner scanner=new Scanner(System.in);
         }
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("\n"+e.getMessage().split("\n")[0] + "\n");
         }
 
     }
