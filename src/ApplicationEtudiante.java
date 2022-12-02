@@ -9,7 +9,7 @@ import java.util.Scanner;
 public class ApplicationEtudiante {
     Connection connection = Main.conn;
     Scanner scanner = new Scanner(System.in);
-    static int idEtudiant;
+     int idEtudiant;
     // PreparedStatement ....
     PreparedStatement visualiserCoursInscrit, inscriptionGroupe, demissionGroupe, visualiserProjetInscrit, visualiserProjetPasEncoreInscrit, visualiserGroupeIncomplet,
             getUser, transformStringIdIntoIntegerID;
@@ -42,7 +42,6 @@ public class ApplicationEtudiante {
             try (ResultSet set = getUser.executeQuery()) {
                 while (set.next()) {
                     idStudent = set.getInt(1);
-                    System.out.println(idStudent);
                     passwordDb = set.getString("password");
                 }
             }
@@ -100,7 +99,7 @@ public class ApplicationEtudiante {
             System.out.println("Entrer le numero du groupe");
             groupe = Integer.parseInt(scanner.nextLine());
             inscriptionGroupe.setInt(2, groupe);
-            System.out.println(idEtudiant);
+
             inscriptionGroupe.setInt(3, idEtudiant);
 
             inscriptionGroupe.execute();
@@ -120,7 +119,7 @@ public class ApplicationEtudiante {
             try (ResultSet set = demissionGroupe.executeQuery()) {
                 while (set.next()) {
                     if (set.getInt(1) == 0) {
-                        System.out.println("Désincription impossible,l'etudiant n'est pas inscrit a ce cours ou a un groupe ");
+                        System.out.println("Désincription impossible,l'etudiant n'a pas de groupe pour ce projet ");
                     } else {
                         System.out.println("Désinscription réussi");
                     }
@@ -156,13 +155,13 @@ public class ApplicationEtudiante {
             visualiserProjetPasEncoreInscrit.setInt(1, idEtudiant);
             try (ResultSet set = visualiserProjetPasEncoreInscrit.executeQuery()) {
                 String column1 = set.getMetaData().getColumnName(1), column2 = set.getMetaData().getColumnName(2), column3 = set.getMetaData().getColumnName(3),
-                        column4 = set.getMetaData().getColumnName(4), column5 = set.getMetaData().getColumnName(5);
+                        column4 = set.getMetaData().getColumnName(4), column5 = set.getMetaData().getColumnName(5),column6=set.getMetaData().getColumnName(6);
 
-                System.out.printf(" | %-19s | %-10s | %-19s | %-10s | %-10s", column1, column2, column3, column4, column5);
+                System.out.printf(" | %-10s | %-15s | %-19s | %-10s | %-10s | %-10s ", column1, column2, column3, column4, column5,column6);
                 System.out.println();
                 while (set.next()) {
-                    System.out.printf(" | %-19s | %-10s | %-19s | %-10s | %-10s", set.getString(column1), set.getString(column2), set.getString(column3)
-                            , set.getString(column4), set.getString(column5));
+                    System.out.printf(" | %-10s | %-15s | %-19s | %-10s | %-10s | %-10s ", set.getString(column1), set.getString(column2), set.getString(column3)
+                            , set.getString(column4), set.getString(column5),set.getString(column6));
                     System.out.println();
                 }
             }

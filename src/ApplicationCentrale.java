@@ -24,8 +24,8 @@ public class ApplicationCentrale {
             ajouterUnCours = connection.prepareStatement("SELECT projet.ajouterCours(?,?,?,?);");
             ajouterEtudiant = connection.prepareStatement("SELECT projet.ajouterEtudiant(?,?,?,?);");
             inscrireEtudiantAUnCours = connection.prepareStatement("SELECT projet.inscrireEtudiantACours(?,?);");
-            ajouterProjet = connection.prepareStatement("SELECT projet.ajouterProjet(?,?,?,?,?,?)");
-            ajouterGroupe = connection.prepareStatement("SELECT projet.ajouterGroupes(?,?)");
+            ajouterProjet = connection.prepareStatement("SELECT projet.ajouterProjet(?,?,?,?,?)");
+            ajouterGroupe = connection.prepareStatement("SELECT projet.ajouterGroupes(?,?,?)");
             visualiserCours = connection.prepareStatement("SELECT * FROM visualiserCours() t(code CHAR(8), nom VARCHAR(255), projet VARCHAR);");
             visualiserProjet = connection.prepareStatement("SELECT * FROM projet.visualiserProjets");
             visualiserGroupe = connection.prepareStatement("SELECT * FROM projet.visualiserCompositions WHERE projet=(?);");
@@ -38,7 +38,7 @@ public class ApplicationCentrale {
 
         //faire fonction
     }
-
+//1
     public void ajouterCours() {
         String nom;
         int bloc, nbeCredit;
@@ -62,7 +62,7 @@ public class ApplicationCentrale {
 
     }
 
-
+//2
     public void ajouterEtudiant() {
         String nom, prenom, email, password;
         try {
@@ -84,7 +84,7 @@ public class ApplicationCentrale {
         }
 
     }
-
+//3
     public void inscrireEtudiantACours() {
         String emailEtudiant;
         try {
@@ -98,10 +98,9 @@ public class ApplicationCentrale {
             System.out.println(e.getMessage().split("\n")[0] + "\n");
         }
     }
-
+//4
     public void ajouterProjet() {
         String nomProjet, identifiantProjet;
-        int nombreGroupePossible;
         String dateDebut, dateFin;
         try {
             System.out.println("Entrer le code du cours ");
@@ -119,29 +118,31 @@ public class ApplicationCentrale {
             dateFin = scanner.nextLine();
             ajouterProjet.setDate(4, java.sql.Date.valueOf(dateFin));
 
-            System.out.println("Entrer la nombre de groupe que le projet peux contenir");
-            nombreGroupePossible = Integer.parseInt(scanner.nextLine());
-            ajouterProjet.setInt(5, nombreGroupePossible);
+
             System.out.println("Entrer l'identifiant du projet (String)");
             identifiantProjet = scanner.nextLine();
-            ajouterProjet.setString(6, identifiantProjet);
+            ajouterProjet.setString(5, identifiantProjet);
             ajouterProjet.execute();
         } catch (SQLException e) {
             System.out.println(e.getMessage().split("\n")[0] + "\n");
         }
     }
-
+//5
     public void ajouterGroupe() {
         String projet;
-        int tailleMaxGroupe;
+        int tailleMaxGroupe ,nbeGroupe;
         try {
-            System.out.println("Identifiant du projet ou il faut rajouter un groupe");
+            System.out.println("Identifiant du projet ou il faut rajouter un groupe (String)");
             projet = scanner.nextLine();
             ajouterGroupe.setString(1, projet);
 
-            System.out.println("Capacite max du groupe");
+            System.out.println("Entrer le nombre de groupe ");
+            nbeGroupe = Integer.parseInt(scanner.nextLine());
+            ajouterGroupe.setInt(2, nbeGroupe);
+
+            System.out.println("Capacité max du groupe");
             tailleMaxGroupe = Integer.parseInt(scanner.nextLine());
-            ajouterGroupe.setInt(2, tailleMaxGroupe);
+            ajouterGroupe.setInt(3, tailleMaxGroupe);
 
             ajouterGroupe.execute();
         } catch (SQLException e) {
@@ -149,7 +150,7 @@ public class ApplicationCentrale {
         }
 
     }
-
+//6
     public void visualiserCours() {
         try {
             try (ResultSet set = visualiserCours.executeQuery();) {
@@ -166,7 +167,7 @@ public class ApplicationCentrale {
             System.out.println("\n" + e.getMessage().split("\n")[0] + "\n");
         }
     }
-
+//7
     public void visualiserProjets() {
         try {
 
@@ -176,11 +177,11 @@ public class ApplicationCentrale {
                         column4 = set.getMetaData().getColumnName(4), column5 = set.getMetaData().getColumnName(5), column6 = set.getMetaData().getColumnName(6);
 
                 System.out.println();
-                System.out.printf("| %-20s | %-10s | %-10s | %-21s | %-24s | %-21s ", column1, column2, column3, column4, column5, column6);
+                System.out.printf("| %-20s | %-10s | %-10s | %-24s | %-28s | %-21s ", column1, column2, column3, column4, column5, column6);
                 System.out.println();
 
                 while (set.next()) {
-                    System.out.printf("| %-20s | %-10s | %-10s | %-21s | %-24s | %-21s ", set.getString(column1), set.getString(column2),
+                    System.out.printf("| %-20s | %-10s | %-10s | %-24s | %-28s | %-21s ", set.getString(column1), set.getString(column2),
                             set.getString(column3), set.getString(column4), set.getString(column5), set.getString(column6));
                     System.out.println();
                 }
@@ -189,7 +190,7 @@ public class ApplicationCentrale {
             System.out.println("\n" + e.getMessage().split("\n")[0] + "\n");
         }
     }
-
+//8
     public void visualiserGroupe() {
         int projet = -1;
         String projetString;
@@ -206,7 +207,6 @@ public class ApplicationCentrale {
 
             visualiserGroupe.setInt(1, projet);
             try (ResultSet set = visualiserGroupe.executeQuery()) {
-                System.out.println("ici");
                 System.out.printf(" | %-7s | %-12s | %-12s | %-9s | %-9s  ", "Numero", "Nom", "Prénom", "Complet?", "Valider?");
                 System.out.println();
                 while (set.next()) {
@@ -221,7 +221,7 @@ public class ApplicationCentrale {
         }
 
     }
-
+//9
     public void validerUnGroupe() {
         int numeroGroupe;
         String identifiantProjet;
@@ -239,7 +239,7 @@ public class ApplicationCentrale {
             System.out.println(e.getMessage().split("\n")[0] + "\n");
         }
     }
-
+//10
     public void validerToutLesGroupes() {
         String identifiantProjet;
         try {

@@ -29,7 +29,7 @@ public class MenuEtudiant {
             System.out.println("3 : Se desinscrire d'un groupe");
             System.out.println("4 : Visualiser Projet Cours Inscrit");
             System.out.println("5 : Visualiser projet pour lequelle pas encore de groupe");
-            System.out.println("6 : Visualiser composition groupe d'un projet");
+            System.out.println("6 : Visualiser composition groupe incomplet d'un projet");
             System.out.println("7 : Se deconnecter");
             int choixMenu = scanner.nextInt();
             m.declaration();
