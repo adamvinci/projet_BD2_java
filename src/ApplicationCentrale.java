@@ -192,7 +192,7 @@ public class ApplicationCentrale {
     }
 //8
     public void visualiserGroupe() {
-        int projet = -1;
+        Integer projet = -1;
         String projetString;
         try {
             System.out.println("Id du projet (String)");
@@ -204,21 +204,26 @@ public class ApplicationCentrale {
                     projet = set1.getInt(1);
                 }
             }
+            if (projet == -1) {
+                System.out.println("Ce projet n'existe pas");
+            } else {
 
-            visualiserGroupe.setInt(1, projet);
-            try (ResultSet set = visualiserGroupe.executeQuery()) {
-                System.out.printf(" | %-7s | %-12s | %-12s | %-9s | %-9s  ", "Numero", "Nom", "Prénom", "Complet?", "Valider?");
-                System.out.println();
-                while (set.next()) {
-                    System.out.printf(" | %-7s | %-12s | %-12s | %-9s | %-9s ", set.getString("numero"), set.getString("nom"), set.getString("prenom"),
-                            set.getBoolean("complet"), set.getBoolean("valider"));
+                visualiserGroupe.setInt(1, projet);
+                try (ResultSet set = visualiserGroupe.executeQuery()) {
+                    System.out.printf(" | %-7s | %-12s | %-12s | %-9s | %-9s  ", "Numero", "Nom", "Prénom", "Complet?", "Valider?");
                     System.out.println();
+                    while (set.next()) {
+                        System.out.printf(" | %-7s | %-12s | %-12s | %-9s | %-9s ", set.getString("numero"), set.getString("nom"), set.getString("prenom"),
+                                set.getBoolean("complet"), set.getBoolean("valider"));
+                        System.out.println();
+                    }
                 }
             }
 
-        } catch (SQLException e) {
-            System.out.println("\n" + e.getMessage().split("\n")[0] + "\n");
-        }
+            } catch(SQLException e){
+                System.out.println("\n" + e.getMessage().split("\n")[0] + "\n");
+            }
+
 
     }
 //9

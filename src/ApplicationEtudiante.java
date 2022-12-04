@@ -185,15 +185,19 @@ public class ApplicationEtudiante {
                     projet = set.getInt(1);
                 }
             }
-            visualiserGroupeIncomplet.setInt(1, projet);
-            try (ResultSet set = visualiserGroupeIncomplet.executeQuery()) {
+            if (projet == -1) {
+                System.out.println("Ce projet n'existe pas");
+            } else {
+                visualiserGroupeIncomplet.setInt(1, projet);
+                try (ResultSet set = visualiserGroupeIncomplet.executeQuery()) {
 
-                System.out.printf(" | %-7s | %-12s | %-12s | %-15s", "Numero", "Nom", "Prénom", "Nombre de places");
-                System.out.println();
-                while (set.next()) {
-                    System.out.printf(" | %-7s | %-12s | %-12s | %-15s", set.getString("numero"), set.getString("nom"), set.getString("prenom"),
-                            set.getString("nbePlace"));
+                    System.out.printf(" | %-7s | %-12s | %-12s | %-15s", "Numero", "Nom", "Prénom", "Nombre de places");
                     System.out.println();
+                    while (set.next()) {
+                        System.out.printf(" | %-7s | %-12s | %-12s | %-15s", set.getString("numero"), set.getString("nom"), set.getString("prenom"),
+                                set.getString("nbePlace"));
+                        System.out.println();
+                    }
                 }
             }
         } catch (SQLException e) {
