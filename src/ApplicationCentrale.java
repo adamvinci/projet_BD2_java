@@ -192,7 +192,7 @@ public class ApplicationCentrale {
     }
 //8
     public void visualiserGroupe() {
-        Integer projet = -1;
+        int projet = -1;
         String projetString;
         try {
             System.out.println("Id du projet (String)");
