@@ -36,7 +36,6 @@ public class ApplicationCentrale {
             e.printStackTrace();
         }
 
-        //faire fonction
     }
 //1
     public void ajouterCours() {

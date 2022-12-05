@@ -10,7 +10,6 @@ public class ApplicationEtudiante {
     Connection connection = Main.conn;
     Scanner scanner = new Scanner(System.in);
      int idEtudiant;
-    // PreparedStatement ....
     PreparedStatement visualiserCoursInscrit, inscriptionGroupe, demissionGroupe, visualiserProjetInscrit, visualiserProjetPasEncoreInscrit, visualiserGroupeIncomplet,
             getUser, transformStringIdIntoIntegerID;
 
@@ -27,9 +26,6 @@ public class ApplicationEtudiante {
         } catch (SQLException e) {
             System.out.println("\n" + e.getMessage().split("\n")[0] + "\n");
         }
-
-
-        //faire fonction
     }
 
     public void seConnecter() {
@@ -62,7 +58,6 @@ public class ApplicationEtudiante {
         }
         if (MenuEtudiant.connexion) {
             idEtudiant = idStudent;
-            System.out.println(idEtudiant);
         }
     }
 
@@ -171,7 +166,7 @@ public class ApplicationEtudiante {
 
     }
 
-    // 6 rajouter une exception si projet n'existe pas pck appele plus la procedure qui verifiait ca
+//6
     public void visualiserGroupeIncomplet() {
         int projet = -1;
         String projetString;
