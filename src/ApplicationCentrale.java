@@ -154,11 +154,11 @@ public class ApplicationCentrale {
         try {
             try (ResultSet set = visualiserCours.executeQuery()) {
                 System.out.println();
-                System.out.printf(" | %-8s | %-10s | %-5s  ", set.getMetaData().getColumnName(1), set.getMetaData().getColumnName(2), set.getMetaData().getColumnName(3));
+                System.out.printf(" | %-10s | %-10s | %-5s  ", set.getMetaData().getColumnName(1), set.getMetaData().getColumnName(2), "Projet");
                 System.out.println();
 
                 while (set.next()) {
-                    System.out.printf(" | %-8s | %-10s | %-5s  ", set.getString(set.getMetaData().getColumnName(1)),
+                    System.out.printf(" | %-10s | %-10s | %-5s  ", set.getString(set.getMetaData().getColumnName(1)),
                             set.getString(set.getMetaData().getColumnName(2)), set.getString(set.getMetaData().getColumnName(3)));
                     System.out.println();
                 }
