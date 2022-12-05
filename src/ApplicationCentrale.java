@@ -26,7 +26,7 @@ public class ApplicationCentrale {
             inscrireEtudiantAUnCours = connection.prepareStatement("SELECT projet.inscrireEtudiantACours(?,?);");
             ajouterProjet = connection.prepareStatement("SELECT projet.ajouterProjet(?,?,?,?,?)");
             ajouterGroupe = connection.prepareStatement("SELECT projet.ajouterGroupes(?,?,?)");
-            visualiserCours = connection.prepareStatement("SELECT * FROM visualiserCours() t(code CHAR(8), nom VARCHAR(255), projet VARCHAR);");
+            visualiserCours = connection.prepareStatement("SELECT * FROM projet.visualiserCours");
             visualiserProjet = connection.prepareStatement("SELECT * FROM projet.visualiserProjets");
             visualiserGroupe = connection.prepareStatement("SELECT * FROM projet.visualiserCompositions WHERE projet=(?);");
             transformStringIdIntoIntegerID = connection.prepareStatement("SELECT  id_projet FROM projet.projets WHERE identifiant_projet = (?);");
@@ -152,13 +152,14 @@ public class ApplicationCentrale {
 //6
     public void visualiserCours() {
         try {
-            try (ResultSet set = visualiserCours.executeQuery();) {
+            try (ResultSet set = visualiserCours.executeQuery()) {
                 System.out.println();
                 System.out.printf(" | %-8s | %-10s | %-5s  ", set.getMetaData().getColumnName(1), set.getMetaData().getColumnName(2), set.getMetaData().getColumnName(3));
                 System.out.println();
 
                 while (set.next()) {
-                    System.out.printf(" | %-8s | %-10s | %-5s  ", set.getString("code"), set.getString("nom"), set.getString("projet"));
+                    System.out.printf(" | %-8s | %-10s | %-5s  ", set.getString(set.getMetaData().getColumnName(1)),
+                            set.getString(set.getMetaData().getColumnName(2)), set.getString(set.getMetaData().getColumnName(3)));
                     System.out.println();
                 }
             }

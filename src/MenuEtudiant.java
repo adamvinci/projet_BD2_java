@@ -10,7 +10,7 @@ public class MenuEtudiant {
         System.out.println("1 : Se connecter");
         System.out.println("2 : Changer de menu");
         System.out.println("3 : Quitter");
-        int choixMenu = scanner.nextInt();
+        int choixMenu = Integer.parseInt(scanner.nextLine());
         switch (choixMenu) {
             case 1 -> {appEtudiante.seConnecter();menuStudentConnecter();}
             case 2-> m.menu();

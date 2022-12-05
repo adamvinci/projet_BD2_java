@@ -45,7 +45,7 @@ public class Main {
         System.out.println("2 : Application utilisateur");
         System.out.println("3 : Quitter");
         declaration();
-        int choixMenu = scanner.nextInt();
+        int choixMenu = Integer.parseInt(scanner.nextLine());
         switch (choixMenu) {
             case 1:
                 menuCentrale.menuCentrale();

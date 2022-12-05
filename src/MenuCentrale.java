@@ -22,7 +22,7 @@ public class MenuCentrale {
         System.out.println("11 : Changer de menu");
         System.out.println("12 : Quitter");
 
-        int choixMenu = scanner.nextInt();
+        int choixMenu = Integer.parseInt(scanner.nextLine());
         m.declaration();
         switch (choixMenu) {
             case 1 -> appCentrale.ajouterCours();
