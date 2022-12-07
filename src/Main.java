@@ -6,7 +6,7 @@ import java.util.Scanner;
 public class Main {
 
 
-    private Scanner scanner = new Scanner(System.in);
+     Scanner scanner = new Scanner(System.in);
     static Connection conn = null;
     MenuCentrale menuCentrale;
     MenuEtudiant menuEtudiant;
