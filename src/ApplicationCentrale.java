@@ -18,7 +18,9 @@ public class ApplicationCentrale {
     String sel = BCrypt.gensalt();
     PreparedStatement ajouterUnCours, ajouterEtudiant, inscrireEtudiantAUnCours, ajouterProjet, ajouterGroupe, validerUnGroupe,
             validerToutLesGroupes, visualiserCours, visualiserProjet, visualiserGroupe, transformStringIdIntoIntegerID;
+    public void demarrer(){
 
+    }
     public ApplicationCentrale() {
         try {
             ajouterUnCours = connection.prepareStatement("SELECT projet.ajouterCours(?,?,?,?);");
@@ -51,7 +53,7 @@ public class ApplicationCentrale {
             bloc = Integer.parseInt(scanner.nextLine());
             ajouterUnCours.setInt(3, bloc);
             System.out.println("Entrer le nombre de credit du cours");
-            nbeCredit = scanner.nextInt();
+            nbeCredit = Integer.parseInt(scanner.nextLine());
             ajouterUnCours.setInt(4, nbeCredit);
             ajouterUnCours.execute();
 

@@ -31,7 +31,7 @@ public class MenuEtudiant {
             System.out.println("5 : Visualiser projet pour lequelle pas encore de groupe");
             System.out.println("6 : Visualiser composition groupe incomplet d'un projet");
             System.out.println("7 : Se deconnecter");
-            int choixMenu = scanner.nextInt();
+            int choixMenu = Integer.parseInt(scanner.nextLine());
             m.declaration();
             switch (choixMenu) {
                 case 1 -> appEtudiante.visualiserCoursInscrit();

@@ -19,12 +19,12 @@ public class Main {
             System.out.println("Driver PostgreSQL manquant !");
             System.exit(1);
         }
-       String url = "jdbc:postgresql://localhost:5432/postgres";
-          // String url= "jdbc:postgresql://172.24.2.6:5432/dbadamebarhdadi";
+       //String url = "jdbc:postgresql://localhost:5432/postgres";
+           String url= "jdbc:postgresql://172.24.2.6:5432/dbadamebarhdadi";
 
         try {
-            conn = DriverManager.getConnection(url, "postgres", "postgres");
-           //  conn= DriverManager.getConnection(url,"adamebarhdadi","P3EISJ7DN");
+           // conn = DriverManager.getConnection(url, "postgres", "postgres");
+             conn= DriverManager.getConnection(url,"adamebarhdadi","P3EISJ7DN");
         } catch (SQLException e) {
             System.out.println("Impossible de joindre le server !");
             System.exit(1);
