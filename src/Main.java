@@ -24,7 +24,7 @@ public class Main {
 
         try {
            // conn = DriverManager.getConnection(url, "postgres", "postgres");
-             conn= DriverManager.getConnection(url,"adamebarhdadi","P3EISJ7DN");
+             conn= DriverManager.getConnection(url,"adamebarhdadi","");
         } catch (SQLException e) {
             System.out.println("Impossible de joindre le server !");
             System.exit(1);
